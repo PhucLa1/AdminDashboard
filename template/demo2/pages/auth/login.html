@@ -66,7 +66,7 @@ License: For each use you must have a valid license purchased only from above li
                     <form class="forms-sample">
                       <div class="mb-3">
                         <label for="userEmail" class="form-label">Username</label>
-                        <input type="email" class="form-control" id="userEmail" placeholder="Email">
+                        <input type="text" class="form-control" id="userEmail" placeholder="Email">
                       </div>
                       <div class="mb-3">
                         <label for="userPassword" class="form-label">Password</label>
@@ -79,8 +79,8 @@ License: For each use you must have a valid license purchased only from above li
                         </label>
                       </div>
                       <div>
-                        <a href="../../dashboard.html" class="btn btn-primary me-2 mb-2 mb-md-0 text-white">Login</a>
-                        <button type="button" class="btn btn-outline-primary btn-icon-text mb-2 mb-md-0">
+                        <button onclick="Login()" type="button"  class="btn btn-primary me-2 mb-2 mb-md-0 text-white">Login</button>
+                        <button  type="button" class="btn btn-outline-primary btn-icon-text mb-2 mb-md-0">
                           <i class="btn-icon-prepend" data-feather="twitter"></i>
                           Login with twitter
                         </button>
@@ -112,7 +112,30 @@ License: For each use you must have a valid license purchased only from above li
 
 	<!-- Custom js for this page -->
 	<!-- End custom js for this page -->
-
+  <script>
+      function Login(){
+        var username = document.getElementById('userEmail').value
+        var password = document.getElementById('userPassword').value
+        console.log(username)
+        apiUrl = `https://localhost:7251/api/LoginSignUp/LoginAdminPage?user=${username}&pass=${password}`;
+        const data = fetch(apiUrl)
+      .then(response => {
+        // Xử lý phản hồi tương tự như trong ví dụ trước
+        if (!response.ok) {
+          throw new Error(`Yêu cầu thất bại với mã lỗi: ${response.status}`);
+        }
+        return response;
+      })
+      .then(data => {
+        // Xử lý dữ liệu nhận được
+        window.location.href = "../../dashboard.html"
+      })
+      .catch(error => {
+        // Xử lý lỗi nếu có lỗi xảy ra
+        console.error('Đã xảy ra lỗi:', error);
+      });
+      }
+  </script>
 </body>
 
 <!-- Mirrored from www.nobleui.com/html/template/demo2/pages/auth/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 08 Nov 2023 08:48:01 GMT -->
