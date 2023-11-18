@@ -27,4 +27,30 @@ $(function() {
     });
   });
 
+
+  var apiUrl = "https://localhost:7251/api/Education/GetAll"
+  var table = document.getElementById('tableBody')
+  const data =  fetch(apiUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Yêu cầu thất bại với mã lỗi: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(datas => {
+        datas.forEach((data)=>{
+          var add = `                      
+          <tr>
+          <td>${data.id}</td>
+          <td>${data.eName}</td>
+          <td>${data.ofStatus}</td>
+        </tr>`
+          table.innerHTML += add
+          console.log(data.id)
+        })
+      })
+      .catch(error => {
+        // Xử lý lỗi nếu có lỗi xảy ra
+        console.error('Đã xảy ra lỗi:', error);
+      });
 });

@@ -17,4 +17,14 @@ $(function() {
     stepsOrientation: 'vertical'
   });
 
+
+  function checkPass(){
+
+  }
+  function checkOTP(){
+    
+  }
+  function genUser(){
+
+  }
 });
