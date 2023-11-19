@@ -731,4 +731,65 @@ $(function () {
     }
   }
 
+  var apiUrl = "https://localhost:7251/api/Admin/GetAll"
+  var table = document.getElementById('tableAdmin')
+  const data =  fetch(apiUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Yêu cầu thất bại với mã lỗi: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(datas => {
+        datas.forEach((data)=>{
+          var add = `                      
+          <tr>
+          <td>${data.id}</td>
+          <td>${data.userName}</td>
+          <td>${data.pass}</td>
+          <td>${data.ofStatus}</td>
+        </tr>`
+          table.innerHTML += add
+          console.log(data.id)
+        })
+      })
+      .catch(error => {
+        // Xử lý lỗi nếu có lỗi xảy ra
+        console.error('Đã xảy ra lỗi:', error);
+      });
+     
+    var apiUrl1 = "https://localhost:7251/api/Users/GetAllUser"    
+    var table1 = document.getElementById('tableUser')
+    const data1 =  fetch(apiUrl1)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Yêu cầu thất bại với mã lỗi: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(datas => {
+        datas.forEach((data1)=>{
+          var add = `
+          <a href="javascript:;" class="d-flex align-items-center border-bottom pb-3">
+                    <div class="me-3">
+                      <img src="../assets/images/faces/face2.jpg" class="rounded-circle wd-35" alt="user">
+                    </div>
+                    <div class="w-100">
+                      <div class="d-flex justify-content-between">
+                        <h6 class="text-body mb-2">${data1.userName}</h6>
+                        <p class="text-muted tx-12">${data1.ofStatus}</p>
+                      </div>
+                      <p class="text-muted tx-13">Not logged in for 30 days</p>
+                    </div>
+                  </a>                      
+          `
+          table1.innerHTML += add
+          console.log(data1.id)
+        })
+      })
+      .catch(error => {
+        // Xử lý lỗi nếu có lỗi xảy ra
+        console.error('Đã xảy ra lỗi:', error);
+      });
+
 });

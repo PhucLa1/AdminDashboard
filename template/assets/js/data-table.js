@@ -28,7 +28,7 @@ $(function() {
   });
 
 
-  var apiUrl = "https://localhost:7251/api/Education/GetAll"
+  var apiUrl = "https://localhost:7251/api/Users/GetAllUser"
   var table = document.getElementById('tableBody')
   const data =  fetch(apiUrl)
       .then(response => {
@@ -42,8 +42,9 @@ $(function() {
           var add = `                      
           <tr>
           <td>${data.id}</td>
-          <td>${data.eName}</td>
+          <td>${data.fullName}</td>
           <td>${data.ofStatus}</td>
+          <td>${data.liveAt}</td>
         </tr>`
           table.innerHTML += add
           console.log(data.id)
