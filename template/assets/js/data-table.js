@@ -1,57 +1,51 @@
-// npm package: datatables.net-bs5
-// github link: https://github.com/DataTables/Dist-DataTables-Bootstrap5
-
-$(function() {
-  'use strict';
-
-  $(function() {
-    $('#dataTableExample').DataTable({
-      "aLengthMenu": [
-        [10, 30, 50, -1],
-        [10, 30, 50, "All"]
+$(document).ready(function() {
+  var table = $('#dataTableExample').DataTable({
+      "processing": true,
+      "serverSide": true,
+      "ajax": {
+          "url": "https://localhost:7251/api/DashBoard/PaginationUser",
+          "type": "GET",
+          "data": function(d) {
+              // Thêm các tham số cần thiết để gửi yêu cầu đến API
+              d.draw = d.draw;
+              d.start = d.start;
+              d.length = d.length;
+          },
+          "dataSrc": function(response) {
+              datas = response.data
+              datas.forEach((data)=>{
+                  if(data.sexsualOrientation == null) {data.sexsualOrientation  = "Not Filled"}
+                  if(data.futureFamily == null) {data.futureFamily  = "Not Filled"}
+                  if(data.vacxinCovid == null) {data.vacxinCovid  = "Not Filled"}
+                  if(data.zodiac == null) {data.zodiac  = "Not Filled"}
+                  if(data.education == null) {data.education  = "Not Filled"}
+              })
+              return datas; // Trả về mảng dữ liệu từ API
+          }
+      },
+      "columns": [
+          { "data": "id" },
+          { "data": "fullName" },
+          { "data": "age" },
+          { "data": "sexsualOrientation" },
+          { "data": "futureFamily" },
+          { "data": "vacxinCovid" },
+          { "data": "zodiac" },
+          { "data": "education" },
+          // Thêm các cột khác nếu cần thiết
       ],
-      "iDisplayLength": 10,
+      "pageLength": 10,
       "language": {
-        search: ""
-      }
-    });
-    $('#dataTableExample').each(function() {
-      var datatable = $(this);
-      // SEARCH - Add the placeholder for Search and Turn this into in-line form control
-      var search_input = datatable.closest('.dataTables_wrapper').find('div[id$=_filter] input');
-      search_input.attr('placeholder', 'Search');
-      search_input.removeClass('form-control-sm');
-      // LENGTH - Inline-Form control
-      var length_sel = datatable.closest('.dataTables_wrapper').find('div[id$=_length] select');
-      length_sel.removeClass('form-control-sm');
-    });
+          search: ""
+      },        
+      "initComplete": function () {
+        this.api().columns().every(function () {
+            var that = this;
+            $('<input>').appendTo($(this.footer()).empty())
+                .on('keyup', function () {
+                    that.search(this.value).draw();
+                });
+        });
+    }
   });
-
-
-  var apiUrl = "https://localhost:7251/api/Users/GetAllUser"
-  var table = document.getElementById('tableBody')
-  const data =  fetch(apiUrl)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Yêu cầu thất bại với mã lỗi: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(datas => {
-        datas.forEach((data)=>{
-          var add = `                      
-          <tr>
-          <td>${data.id}</td>
-          <td>${data.fullName}</td>
-          <td>${data.ofStatus}</td>
-          <td>${data.liveAt}</td>
-        </tr>`
-          table.innerHTML += add
-          console.log(data.id)
-        })
-      })
-      .catch(error => {
-        // Xử lý lỗi nếu có lỗi xảy ra
-        console.error('Đã xảy ra lỗi:', error);
-      });
 });
